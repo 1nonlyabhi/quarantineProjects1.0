@@ -1,0 +1,17 @@
+{
+    "params":
+    {
+        "local_server":"True",
+        "local_uri":"mysql://root:@localhost/cleanpost",
+        "prod_uri":"mysql://root:@localhost/cleanpost",
+
+        "gmail-user":"",
+        "gmail-password":"",
+
+        "no_of_posts": 1,
+
+        "login_img": "",
+        "admin_user": "abhi",
+        "admin_pass": "subscribe"
+    }
+}
