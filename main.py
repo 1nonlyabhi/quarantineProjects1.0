@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy 
 from flask_mail import Mail
-import json
+from werkzeug.utils import secure_filename
+import json, os
 from datetime import datetime
 import math
 
@@ -17,6 +18,7 @@ with open('E:\Python Programs\Projects\Web\config.json', 'r') as c:
 local_server=True
 app = Flask(__name__)
 app.secret_key = 'super-secret-key'
+app.config['UPLOAD_FOLDER'] = params['location']
 app.config.update(
     MAIL_SERVER = 'smtp.gmail.com',
     MAIL_PORT = '465',
@@ -97,6 +99,19 @@ def dashboard():
 
     return render_template('login.html', params=params)
 
+@app.route('/uploader', methods=['GET','POST'])    
+def uploader():
+    if ('user' in session and session['user'] == params['admin_user']):
+        if(request.method == 'POST'):
+            file = request.files['file']
+            if file:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+                flash('File Uploaded successfully')
+                return redirect (url_for('dashboard'))
+            flash('Please select the file first !')
+        return render_template('dashboard.html')
+            
+
 @app.route('/edit/<string:sno>', methods=['GET', 'POST'])
 def edit(sno):
     if ('user' in session and session['user'] == params['admin_user']):
@@ -154,7 +169,7 @@ def post_route(post_slug):
 @app.route('/logout')
 def logout():
     session.pop('user')
-    return redirect('/dashboard')
+    return redirect('dashboard')
 
 @app.route('/delete/<string:sno>', methods=['GET', 'POST'])
 def delete(sno):
@@ -162,6 +177,6 @@ def delete(sno):
         post = Posts.query.filter_by(sno=sno).first()
         db.session.delete(post)
         db.session.commit()
-    return redirect('/dashboard')
+    return redirect('dashboard')
 
 app.run(debug=True)
