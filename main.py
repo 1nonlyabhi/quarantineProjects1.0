@@ -169,7 +169,7 @@ def post_route(post_slug):
 @app.route('/logout')
 def logout():
     session.pop('user')
-    return redirect('dashboard')
+    return redirect('/')
 
 @app.route('/delete/<string:sno>', methods=['GET', 'POST'])
 def delete(sno):
