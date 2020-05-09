@@ -106,10 +106,10 @@ def uploader():
             file = request.files['file']
             if file:
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
-                flash('File Uploaded successfully')
+                flash(f'File Uploaded successfully at {datetime.now()}')
                 return redirect (url_for('dashboard'))
             flash('Please select the file first !')
-        return render_template('dashboard.html')
+        return redirect (url_for('dashboard'))
             
 
 @app.route('/edit/<string:sno>', methods=['GET', 'POST'])
