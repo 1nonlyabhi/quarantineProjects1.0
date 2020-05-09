@@ -154,11 +154,11 @@ def contact():
         entry = Contacts(name=name, email=email, phone_num=phone, msg=message, date=datetime.now())
         db.session.add(entry)
         db.session.commit()
-        mail.send_message('New Msg from' + name, 
-                            sender=email, 
-                            racipients = [params['gmail-user']],
-                            body=message + "\n" + phone
-                            )
+#         mail.send_message('New Msg from' + name, 
+#                             sender=email, 
+#                             racipients = [params['gmail-user']],
+#                             body=message + "\n" + phone
+#                             )
     return render_template('contact.html')
 
 @app.route('/post/<string:post_slug>', methods=['GET'])
